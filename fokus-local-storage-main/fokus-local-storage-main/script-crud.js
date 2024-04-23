@@ -106,3 +106,12 @@ document.addEventListener('focoFinalizado', () => {
         liTarefaSelecionada.querySelector('button').setAttribute('disabled', 'disabled')
     }
 })
+
+/*
+botaoCheck.addEventListener('click', () => {
+    elemento.classList.remove('app__section-task-list-item-active')
+    elemento.classList.add('app__section-task-list-item-complete')
+    liTarefaSelecionada.querySelector('button').setAttribute('disabled', 'disabled')
+})
+
+*/
