@@ -9,7 +9,7 @@ let tarefaSelecionada = null
 let liTarefaSelecionada = null
 let svgSelecionado = null
 const botaoRemoverConcluidas = document.querySelector('#btn-remover-concluidas')
-botaoRemoverTodasAsTarefas = document.querySelector('#btn-remover-todas')
+const botaoRemoverTodasAsTarefas = document.querySelector('#btn-remover-todas')
 
 btnAdicionarTarefa.addEventListener('click', () => {
     form.classList.toggle('hidden')
@@ -31,7 +31,23 @@ function criarElementoTarefa (tarefa) {
                 fill="#01080E"></path>
         </svg>`
 
+    svg.addEventListener('click', () => {
+
+        if (li.classList.contains('app__section-task-list-item-complete')) {
+            li.classList.remove('app__section-task-list-item-complete')
+            tarefa.completa = false
+        }
     
+        else {
+        li.classList.remove('app__section-task-list-item-active')
+        li.classList.add('app__section-task-list-item-complete')
+        botao.setAttribute('disabled', 'disabled')
+        tarefa.completa = true
+        atualizarTarefas();
+        }
+            
+            
+        })
 
     const paragrafo = document.createElement('p');
     paragrafo.textContent = tarefa.descricao
@@ -77,22 +93,7 @@ function criarElementoTarefa (tarefa) {
         li.classList.add('app__section-task-list-item-active');
     }
 
-    svg.addEventListener('click', () => {
 
-        if (li.classList.contains('app__section-task-list-item-complete')) {
-            li.classList.remove('app__section-task-list-item-complete')
-        }
-
-        else {
-        li.classList.remove('app__section-task-list-item-active')
-        li.classList.add('app__section-task-list-item-complete')
-        botao.setAttribute('disabled', 'disabled')
-
-        }
-        var tarefasCompletas = document.querySelectorAll('app__section-task-list-item-complete')
-        localStorage.setItem('tarefasCompletas', JSON.stringify(tarefasCompletas))
-        atualizarTarefas();
-    })
 
     li.append(svg)
     li.append(paragrafo)
@@ -106,7 +107,7 @@ function criarElementoTarefa (tarefa) {
 form.addEventListener('submit', (evento) => {
     evento.preventDefault();
     const tarefa = {
-        descricao: textArea.value
+        descricao: textArea.value,
     }
     tarefas.push(tarefa)
     const elementoTarefa = criarElementoTarefa(tarefa)
