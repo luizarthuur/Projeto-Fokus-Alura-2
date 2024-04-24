@@ -2,13 +2,14 @@ const btnAdicionarTarefa = document.querySelector('.app__button--add-task');
 const form = document.querySelector('.app__form-add-task');
 const textArea = document.querySelector('.app__form-textarea');
 const ulTarefas = document.querySelector('.app__section-task-list')
-let tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+let tarefas = JSON.parse(localStorage.getItem('tarefas'))  || [];
 const botaoCancelar = document.querySelector('.app__form-footer__button--cancel');
 const paragrafoDescricaoTarefa = document.querySelector('.app__section-active-task-description')
 let tarefaSelecionada = null
 let liTarefaSelecionada = null
 let svgSelecionado = null
 const botaoRemoverConcluidas = document.querySelector('#btn-remover-concluidas')
+botaoRemoverTodasAsTarefas = document.querySelector('#btn-remover-todas')
 
 btnAdicionarTarefa.addEventListener('click', () => {
     form.classList.toggle('hidden')
@@ -86,12 +87,11 @@ function criarElementoTarefa (tarefa) {
         li.classList.remove('app__section-task-list-item-active')
         li.classList.add('app__section-task-list-item-complete')
         botao.setAttribute('disabled', 'disabled')
-        tarefaSelecionada = tarefa
-        liTarefaSelecionada = li
-        tarefaSelecionada.completa = true
-        atualizarTarefas();
 
-        }      
+        }
+        var tarefasCompletas = document.querySelectorAll('app__section-task-list-item-complete')
+        localStorage.setItem('tarefasCompletas', JSON.stringify(tarefasCompletas))
+        atualizarTarefas();
     })
 
     li.append(svg)
@@ -137,12 +137,14 @@ document.addEventListener('focoFinalizado', () => {
 })
 
 
-botaoRemoverConcluidas.onclick = () => {
-    const seletor = '.app__section-task-list-item-complete'
+const removerTarefas = (somenteCompletas) => {
+    const seletor = somenteCompletas ? '.app__section-task-list-item-complete' : '.app__section-task-list-item'
     document.querySelectorAll(seletor).forEach(elemento => {
         elemento.remove();
     })
-    tarefas = tarefas.filter(tarefa => !tarefa.completa)
+    tarefas = somenteCompletas ? tarefas.filter(tarefa => !tarefa.completa) : []
     atualizarTarefas();
 }   
 
+botaoRemoverConcluidas.onclick = () => removerTarefas(true);
+botaoRemoverTodasAsTarefas.onclick = () => removerTarefas(false);
